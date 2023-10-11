@@ -61,7 +61,7 @@ export const trpc = (router, { endpoint = '/trpc', ...options } = {
                 }
                 if (incoming.method === 'subscription.stop') {
                     observer?.unsubscribe();
-                    observers.delete(ws.data.id.toString());
+                    observers.delete(ws.data.id);
                     return void ws.send(JSON.stringify({
                         id: incoming.id,
                         jsonrpc: incoming.jsonrpc,
@@ -132,12 +132,12 @@ export const trpc = (router, { endpoint = '/trpc', ...options } = {
                         })));
                     }
                 });
-                observers.set(ws.data.id.toString(), observer);
+                observers.set(ws.data.id, observer);
             }
         },
         close(ws) {
-            observers.get(ws.data.id.toString())?.unsubscribe();
-            observers.delete(ws.data.id.toString());
+            observers.get(ws.data.id)?.unsubscribe();
+            observers.delete(ws.data.id);
         }
     });
     return app;

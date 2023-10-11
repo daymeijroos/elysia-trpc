@@ -91,7 +91,7 @@ export const trpc =
 
             if (incoming.method === 'subscription.stop') {
               observer?.unsubscribe()
-              observers.delete(ws.data.id.toString())
+              observers.delete(ws.data.id)
 
               return void ws.send(
                 JSON.stringify({
@@ -191,15 +191,15 @@ export const trpc =
               }
             })
 
-            observers.set(ws.data.id.toString(), observer)
+            observers.set(ws.data.id, observer)
           }
         },
         close(ws: ServerWebSocket<{
           id: string
           data: Context
         }>) {
-          observers.get(ws.data.id.toString())?.unsubscribe()
-          observers.delete(ws.data.id.toString())
+          observers.get(ws.data.id)?.unsubscribe()
+          observers.delete(ws.data.id)
         }
       })
 
